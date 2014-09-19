@@ -1,0 +1,15 @@
+{
+  "name": "servBridge",
+  "description": "service bridge use node & redis & socket.io",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "*",
+    "express": "4.x",
+    "node-uuid": "*",
+    "redis": "*",
+    "requestify": "^0.1.16",
+    "socket.io": "*",
+    "socket.io-client": "~1.1.0"
+  }
+}
