@@ -35,6 +35,7 @@ http://localhost:9002/
 
 AB测试结果
 ------------
+<pre>
 # ab -n1000 -c50 -T "application/json" -p post.js  http://192.168.1.15:9001/proxy?to=http://localhost:9002/
 This is ApacheBench, Version 2.3 <$Revision: 1430300 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
@@ -94,7 +95,7 @@ Percentage of the requests served within a certain time (ms)
   99%    784
  100%    794 (longest request)
 
-
+</pre>
 
 Useful links:
 -------------
