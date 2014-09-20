@@ -5,12 +5,22 @@ var requestify = require('requestify');
 
 var i = 0;
 
-socket.name = "client" + Date.now();
 
 socket.on('connect', function () {
-    console.log(socket.name + ' connected to server');
+   // console.log(socket);
+    console.log(  'connected to server @ '+ Date.now());
     //socket.on('event', function(data){});
     //socket.on('disconnect', function(){});
+});
+
+
+socket.on('disconnect', function(){
+    console.log(  'disconnected to server @ '+ Date.now());
+    
+});
+
+socket.on('getid',function(data){
+    console.log('haha , my id is : ',data);   
 });
 
 
@@ -31,6 +41,7 @@ socket.on('jsonrequest', function (data) {
 
 });
 
+if (process.argv[2]=='withtest'){
 //for test
 app.post('/', function (req, res) {
     console.log('post to / AT TIME:' + Date.now());
@@ -40,4 +51,4 @@ app.post('/', function (req, res) {
 server.listen(9002, function () {
     console.log("Express server test client listening on port " + 9002);
 });
-
+}
