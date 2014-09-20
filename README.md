@@ -9,10 +9,13 @@ A原本是想访问D，服务A所在A区无法直接访问服务D所在区域的
 
 通过在C区建立一个长连接到B，B接受来自A的访问请求，通过长连接迅速传递给C，同时通过redis的BLPOP阻塞自己，等待数据。
 C立刻调用D访问到A真正需要的数据。通过长连接传递给B，写入redis。B从blpop阻塞中恢复。将数据返回给A。
+<pre>
 
-       |
-A=>B <=|<= C =>D
-       |
+         |
+A=> B <= | <= C =>D
+         |
+
+</pre>
 
 使用方式
 -----------
@@ -20,10 +23,10 @@ A:本来想调用D服务：http://localhost:9002/
 则采用这个地址代替： http://192.168.1.15:9001/proxy?to=http://localhost:9002/
 
 B:启动服务http://192.168.1.15:9001/proxy
-#node app.js
+[root@local ~]# node app.js
 
 C：启动客户端,自动和B建立连接
-#node client.js
+[root@local ~]# node client.js
 
 D：在client.js中模拟了测试服务地址
 http://localhost:9002/
