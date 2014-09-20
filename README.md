@@ -3,8 +3,8 @@ ServiceBridge
 采用 NodeJS、Redis、socket.io技术，构造一个高性能的服务调用桥,也可以说是服务代理。
 
 主要可以用来解决两个问题：
-#1.json跨域调用问题
-#2.跨网络调用问题。
+ 1.json跨域调用问题
+ 2.跨网络调用问题。
 
 
 使用场景
@@ -16,9 +16,9 @@ A原本是想访问D，服务A所在A区无法直接访问服务D所在区域的
 C立刻调用D访问到A真正需要的数据。通过长连接传递给B，写入redis。B从blpop阻塞中恢复。将数据返回给A。
  
 
-         |
+         
 A=> B <= | <= C =>D
-         |
+         
 
  
 
@@ -33,8 +33,7 @@ B:启动服务http://192.168.1.15:9001/proxy
 C：启动客户端,自动和B建立连接
 [root@local ~]# node client.js
 
-D：在client.js中模拟了测试服务地址
-http://localhost:9002/
+D：在client.js中模拟了测试服务地址 http://localhost:9002/
 
 测试方式：
  curl -l -H "Content-type: application/json" -X POST -d '{"phone":"13521389587","password":"test"}' http://192.168.1.15:9001/proxy?to=http://localhost:9002/
@@ -107,7 +106,7 @@ Percentage of the requests served within a certain time (ms)
 
 Useful links:
 -------------
-1.http://redis.io/
-1.http://nodejs.org/
-1.http://expressjs.com/
-1.http://socket.io/
+1.[http://redis.io/]
+2.[http://nodejs.org/]
+3.[http://expressjs.com/]
+4.[http://socket.io/]
