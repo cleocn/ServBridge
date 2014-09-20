@@ -9,13 +9,13 @@ A原本是想访问D，服务A所在A区无法直接访问服务D所在区域的
 
 通过在C区建立一个长连接到B，B接受来自A的访问请求，通过长连接迅速传递给C，同时通过redis的BLPOP阻塞自己，等待数据。
 C立刻调用D访问到A真正需要的数据。通过长连接传递给B，写入redis。B从blpop阻塞中恢复。将数据返回给A。
-<pre>
+ 
 
          |
 A=> B <= | <= C =>D
          |
 
-</pre>
+ 
 
 使用方式
 -----------
@@ -102,7 +102,7 @@ Percentage of the requests served within a certain time (ms)
 
 Useful links:
 -------------
-http://redis.io/
-http://nodejs.org/
-http://expressjs.com/
-http://socket.io/
+1.http://redis.io/
+1.http://nodejs.org/
+1.http://expressjs.com/
+1.http://socket.io/
