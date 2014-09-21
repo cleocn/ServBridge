@@ -4,9 +4,10 @@ var server = require('http').Server(app);
 //var bodyParser = require('body-parser');
 
 //app.use(bodyParser.json());
+var i=1;
 
 app.post('/', function (req, res) {
-    console.log('post to / AT TIME:' + Date.now());
+    console.log(i++,'.post to / AT TIME:' + Date.now());
     //console.log('get request.body : '+ JSON.stringify(req.body));
     
     res.json({"testdata": "test", "time": Date.now()});

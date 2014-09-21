@@ -8,7 +8,8 @@ var db_blpop = redis.createClient(),
     db_sadd = redis.createClient(),
     db_rnd = redis.createClient(),
     db_sub = redis.createClient(),
-    db_pub = redis.createClient();
+    db_pub = redis.createClient();i
+var requestify = require('requestify');
 
 db_sub.on("error", function (err) {
         console.log("redis Error " + err);
@@ -41,13 +42,30 @@ app.get('/', function (req, res) {
 });
 
 app.post('/proxy', function (req, res) {
+    //for test
+    //res.json({"error": "no client error . timeout"});
+    //res.end();
+    //return;
+
     j=0;
-    console.log(++i,'-',++j, ' .post to /proxy AT TIME:' + Date.now());
+    console.log(++i,'-',++j, ' .post to /proxy AT TIME:' + Date.now(), 'srvtype:',req.query.srvtype);
     var jsonrequest = {
         "request": req.body,
         "from": req.url,
         "to": req.query.to,
         "uuid": uuid.v4()};
+
+    if (req.query.srvtype==undefined){
+        requestify.post(jsonrequest.to,  jsonrequest.request)
+             .then(function (response) {
+                         response.getBody();
+                          var dataobj = {};
+                        dataobj.result = JSON.parse(response.body);
+                         res.json(JSON.stringify(dataobj));
+            });
+         
+    }else{
+
     jsonrequest.request.quuid = jsonrequest.uuid; //for test trace the result 
     console.log(i,'-',++j,' wait for blpop: ', JSON.stringify(jsonrequest.uuid));
     //get client
@@ -59,6 +77,8 @@ app.post('/proxy', function (req, res) {
             db_pub.publish(JSON.parse(data).id, JSON.stringify(jsonrequest));
         }
    });
+  //tset
+   //db_rnd.rpush(JSON.stringify(jsonrequest.uuid),'{"result":{}}');
 
     db_blpop.blpop(JSON.stringify(jsonrequest.uuid), 4, function (err, data) {
         console.log(i,'-',++j, "get blpop", jsonrequest.uuid, data);
@@ -68,9 +88,11 @@ app.post('/proxy', function (req, res) {
             res.json(JSON.parse(data[1]).result);
         }
     });
+    //test
+    //db_rnd.rpush(JSON.stringify(jsonrequest.uuid),'{"result":{}}');
     //
     //io.emit('jsonrequest', JSON.stringify(jsonrequest));
-
+   }
 });
 
 server.listen(9001, function () {
@@ -102,13 +124,17 @@ io.on('connection', function (socket) {
         db_sadd.srem(SET_CLIENT_LIST,clientobj);//remove client
     });
     
-   // var db_sub1 = redis.createClient();
-    db_sub.subscribe(clientid);
-    db_sub.on('message',function(channel,message){
-        if (channel==clientid){
+   var db_sub1 = redis.createClient();
+    db_sub1.subscribe(clientid);
+    db_sub1.on('message',function(channel,message){
+        //if (channel==clientid){
+           //test
+          // db_rpush.rpush(JSON.stringify(message.uuid), message, function (err, obj) {});
+          //test end
+           
            console.log(i,'-',++j,clientid + " receiver message & socket.emit to client :  " ,message);
             socket.emit('jsonrequest', message);
-      }
+      //}
     });
 
 });
