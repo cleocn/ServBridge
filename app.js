@@ -10,6 +10,10 @@ var db_blpop = redis.createClient(),
     db_sub = redis.createClient(),
     db_pub = redis.createClient();
 
+db_sub.on("error", function (err) {
+        console.log("redis Error " + err);
+});
+
 var bodyParser = require('body-parser');
 var uuid = require('node-uuid');
 var i = 0,j=0;
@@ -44,6 +48,7 @@ app.post('/proxy', function (req, res) {
         "from": req.url,
         "to": req.query.to,
         "uuid": uuid.v4()};
+    jsonrequest.request.quuid = jsonrequest.uuid; //for test trace the result 
     console.log(i,'-',++j,' wait for blpop: ', JSON.stringify(jsonrequest.uuid));
     //get client
     db_rnd.srandmember(SET_CLIENT_LIST, function (err, data) {
@@ -78,7 +83,8 @@ io.on('connection', function (socket) {
     socket.emit('getid', clientid);
     console.log(clientid + " conected to server @ " + Date.now());
     //console.log((socket));
-    db_sadd.sadd(SET_CLIENT_LIST,'{"id":"'+clientid+'"}');
+    var clientobj = '{"id":"'+clientid+'"}';
+    db_sadd.sadd(SET_CLIENT_LIST,clientobj);
 
     socket.on('result', function (data) {
         console.log(i,'-',++j, 'get result:', JSON.stringify(data));
@@ -93,14 +99,14 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         io.sockets.emit( 'user ', clientid , ' disconnected');
         console.log(clientid + " disconected  @ " + Date.now());
-        db_sadd.srem(SET_CLIENT_LIST,clientid);//remove client
+        db_sadd.srem(SET_CLIENT_LIST,clientobj);//remove client
     });
     
+   // var db_sub1 = redis.createClient();
     db_sub.subscribe(clientid);
     db_sub.on('message',function(channel,message){
         if (channel==clientid){
-           console.log(i,'-',++j,clientid + " receiver message  @ " + Date.now());
-       
+           console.log(i,'-',++j,clientid + " receiver message & socket.emit to client :  " ,message);
             socket.emit('jsonrequest', message);
       }
     });
