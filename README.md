@@ -1,24 +1,30 @@
-ServiceBridge
+ServBridge
 =============
-采用 NodeJS、Redis、socket.io技术，构造一个高性能的服务调用桥,也可以说是服务代理。
+采用 NodeJS、Redis、socket.io技术，构造一个高性能的服务调用桥,也可以说是服务代理或者类似http隧道。
+
 
 主要可以用来解决两个问题：
- 1.json跨域调用问题
- 2.跨网络调用问题。
+*.json跨域调用问题
+*.将网络调用访问，变成双向消息交换。
 
 
-使用场景
+场景
 -----------
+![](https://raw.githubusercontent.com/cleocn/ServBridge/master/doc/deploy.png)
 
+
+主要原理
+------------
 A原本是想访问D，服务A所在A区无法直接访问服务D所在区域的服务。
 
 通过在C区建立一个长连接到B，B接受来自A的访问请求，通过长连接迅速传递给C，同时通过redis的BLPOP阻塞自己，等待数据。
 C立刻调用D访问到A真正需要的数据。通过长连接传递给B，写入redis。B从blpop阻塞中恢复。将数据返回给A。
  
 
-         
 A=> B <= | <= C =>D
-         
+
+![](https://raw.githubusercontent.com/cleocn/ServBridge/master/doc/%E8%AE%BE%E8%AE%A1.png)
+
 
  
 
@@ -36,6 +42,7 @@ C：启动客户端,自动和B建立连接
 D：在client.js中模拟了测试服务地址 http://localhost:9002/
 
 测试方式：
+------------
  curl -l -H "Content-type: application/json" -X POST -d '{"phone":"13521389587","password":"test"}' http://192.168.1.15:9001/proxy?to=http://localhost:9002/
 
 
@@ -43,7 +50,7 @@ D：在client.js中模拟了测试服务地址 http://localhost:9002/
 AB测试结果
 ------------
 <pre>
-# ab -n1000 -c50 -T "application/json" -p post.js  http://192.168.1.15:9001/proxy?to=http://localhost:9002/
+# ab -n1000 -c50 -T "application/json" -p ./test/post.js  http://192.168.1.15:9001/proxy/DEFAULT?to=http://localhost:9002/
 This is ApacheBench, Version 2.3 <$Revision: 1430300 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -106,7 +113,11 @@ Percentage of the requests served within a certain time (ms)
 
 Useful links:
 -------------
-1.[http://redis.io/]
-2.[http://nodejs.org/]
-3.[http://expressjs.com/]
-4.[http://socket.io/]
+*.[http://redis.io/]
+*.[http://nodejs.org/]
+*.[http://expressjs.com/]
+*.[http://socket.io/]
+
+contact
+-------------
+cleocn@gmail.com
