@@ -3,9 +3,16 @@ ServBridge
 采用 NodeJS、Redis、socket.io技术，构造一个高性能的服务调用桥,也可以说是服务代理或者类似http隧道。
 
 
-主要可以用来解决两个问题：
-*.json跨域调用问题
-*.将网络调用访问，变成双向消息交换。
+主要可以用来解决两个问题：<br/>
+* json跨域调用问题<br/>
+*  将网络调用访问，变成双向消息交换。<br/>
+
+修改日志
+-----------
+
+v0.3 支持多个分组client
+v0.2 支持多个client
+v0.1 单个client
 
 
 场景
@@ -113,10 +120,10 @@ Percentage of the requests served within a certain time (ms)
 
 Useful links:
 -------------
-*.[http://redis.io/]
-*.[http://nodejs.org/]
-*.[http://expressjs.com/]
-*.[http://socket.io/]
+* http://redis.io/
+* http://nodejs.org/
+* http://expressjs.com/
+* http://socket.io/
 
 contact
 -------------

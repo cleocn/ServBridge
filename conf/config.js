@@ -5,7 +5,7 @@ module.exports = function(){
     cfg.port = 9001     ;
 
     cfg.REDIS_PORT = 6379;
-    cfg.REDIS_HOST = "192.168.1.5";
+    cfg.REDIS_HOST = "127.0.0.1";
 
     
     cfg.SOCKETSERVER  = "http://192.168.1.15:9001";
